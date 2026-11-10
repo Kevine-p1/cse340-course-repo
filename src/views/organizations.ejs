@@ -7,50 +7,29 @@
         Meet the organizations working to make our
         communities better.
     </p>
-
-    <section class="card-grid" aria-label="Partner organizations">
+<div class="card-grid">
+    <% organizations.forEach((organization) => { %>
         <article class="card">
             <img
-                src="/images/brightfuture-logo.png"
-                alt="Bright Future organization logo"
-            >
+                src="/images/<%= organization.logo_filename %>"
+                alt="<%= organization.name %> logo"
+            />
+
             <div class="card-content">
-                <h2>Bright Future</h2>
+                <h2><%= organization.name %></h2>
+
+                <p><%= organization.description %></p>
+
                 <p>
-                    Supporting educational opportunities
-                    and helping students succeed.
+                    <strong>Email:</strong>
+                    <a href="mailto:<%= organization.contact_email %>">
+                        <%= organization.contact_email %>
+                    </a>
                 </p>
             </div>
         </article>
-
-        <article class="card">
-            <img
-                src="/images/greenharvest-logo.png"
-                alt="Green Harvest organization logo"
-            >
-            <div class="card-content">
-                <h2>Green Harvest</h2>
-                <p>
-                    Encouraging environmental protection
-                    and sustainable community initiatives.
-                </p>
-            </div>
-        </article>
-
-        <article class="card">
-            <img
-                src="/images/unityserve-logo.png"
-                alt="Unity Serve organization logo"
-            >
-            <div class="card-content">
-                <h2>Unity Serve</h2>
-                <p>
-                    Bringing volunteers together to
-                    strengthen local communities.
-                </p>
-            </div>
-        </article>
-    </section>
+    <% }); %>
+</div>>
 </main>
 
 <%- include('partials/footer') %>

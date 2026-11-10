@@ -9,37 +9,32 @@
         a positive difference.
     </p>
 
-    <section class="card-grid" aria-label="Service projects">
+    <div class="card-grid">
+    <% projects.forEach((project) => { %>
         <article class="card">
             <div class="card-content">
-                <h2>Community Cleanup</h2>
-                <p>
-                    Join volunteers to clean public spaces
-                    and protect the environment.
-                </p>
-            </div>
-        </article>
+                <h2><%= project.title %></h2>
 
-        <article class="card">
-            <div class="card-content">
-                <h2>Student Mentorship</h2>
-                <p>
-                    Help students develop important skills
-                    through education and mentorship.
-                </p>
-            </div>
-        </article>
+                <p><%= project.description %></p>
 
-        <article class="card">
-            <div class="card-content">
-                <h2>Food Donation Drive</h2>
                 <p>
-                    Support families in need through
-                    community food collection initiatives.
+                    <strong>Organization:</strong>
+                    <%= project.organization_name %>
+                </p>
+
+                <p>
+                    <strong>Location:</strong>
+                    <%= project.location %>
+                </p>
+
+                <p>
+                    <strong>Date:</strong>
+                    <%= new Date(project.date).toLocaleDateString() %>
                 </p>
             </div>
         </article>
-    </section>
+    <% }); %>
+</div>
 </main>
 
 <%- include('partials/footer') %>
