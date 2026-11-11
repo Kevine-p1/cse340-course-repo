@@ -2,9 +2,7 @@ import { testConnection } from './src/models/db.js';
 import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
-import { getAllOrganizations } from './src/models/organizations.js';
-import { getAllProjects } from './src/models/projects.js';
-import { getAllCategories } from './src/models/categories.js';
+import router from './src/routes.js';
 // Environment configuration
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 const PORT = process.env.PORT || 3000;
@@ -23,55 +21,44 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'src/views'));
 
-// Home page
-app.get('/', async (req, res) => {
-    const title = 'Home';
-    res.render('home', { title });
+// Log incoming requests during development
+app.use((req, res, next) => {
+    if (NODE_ENV === 'development') {
+        console.log(`${req.method} ${req.url}`);
+    }
+    next();
 });
 
-// Organizations page
-app.get('/organizations', async (req, res) => {
-    try {
-        const organizations = await getAllOrganizations();
+// Make NODE_ENV available to EJS templates
+app.use((req, res, next) => {
+    res.locals.NODE_ENV = NODE_ENV;
+    next();
+});
+// Use the application routes
+app.use(router);
 
-        res.render('organizations', {
-            title: 'Organizations',
-            organizations
-        });
-    } catch (error) {
-        console.error('Error fetching organizations:', error);
-        res.status(500).send('Unable to load organizations');
-    }
+// Handle routes that do not exist
+app.use((req, res, next) => {
+    const err = new Error('Page Not Found');
+    err.status = 404;
+    next(err);
 });
 
-// Service Projects page
-app.get('/projects', async (req, res) => {
-    try {
-        const projects = await getAllProjects();
+// Global error handler
+app.use((err, req, res, next) => {
+    console.error('Error occurred:', err.message);
+    console.error('Stack trace:', err.stack);
 
-        res.render('projects', {
-            title: 'Projects',
-            projects
-        });
-    } catch (error) {
-        console.error('Error fetching projects:', error);
-        res.status(500).send('Unable to load projects');
-    }
-});
+    const status = err.status || 500;
+    const template = status === 404 ? '404' : '500';
 
-// Categories page
-app.get('/categories', async (req, res) => {
-    try {
-        const categories = await getAllCategories();
+    const context = {
+        title: status === 404 ? 'Page Not Found' : 'Server Error',
+        error: err.message,
+        stack: err.stack
+    };
 
-        res.render('categories', {
-            title: 'Categories',
-            categories
-        });
-    } catch (error) {
-        console.error('Error fetching categories:', error);
-        res.status(500).send('Unable to load categories');
-    }
+    res.status(status).render(`errors/${template}`, context);
 });
 
 // Start server

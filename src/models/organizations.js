@@ -14,3 +14,17 @@ export const getAllOrganizations = async () => {
 
     return result.rows;
 };
+export const getOrganizationDetails = async (organizationId) => {
+    const result = await db.query(`
+        SELECT
+            organization_id,
+            name,
+            description,
+            contact_email,
+            logo_filename
+        FROM public.organization
+        WHERE organization_id = $1
+    `, [organizationId]);
+
+    return result.rows[0] || null;
+};

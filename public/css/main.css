@@ -219,3 +219,30 @@ a:focus-visible {
         padding: 2rem 0;
     }
 }
+
+.category-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.category-tag {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border: 1px solid #2563eb;
+    border-radius: 20px;
+    color: #1d4ed8;
+    background-color: #eff6ff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.category-tag:hover {
+    background-color: #dbeafe;
+}
+
+.category-tag:focus-visible {
+    outline: 3px solid #1d4ed8;
+    outline-offset: 3px;
+}
