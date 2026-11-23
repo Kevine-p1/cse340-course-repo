@@ -3,6 +3,9 @@ import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import router from './src/routes.js';
+import session from 'express-session';
+import flash from './src/middleware/flash.js';
+
 // Environment configuration
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 const PORT = process.env.PORT || 3000;
@@ -34,6 +37,23 @@ app.use((req, res, next) => {
     res.locals.NODE_ENV = NODE_ENV;
     next();
 });
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+app.set('trust proxy', 1);
+
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 60 * 60 * 1000,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production'
+    }
+}));
+app.use(flash);
 // Use the application routes
 app.use(router);
 
