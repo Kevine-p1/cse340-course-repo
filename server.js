@@ -19,6 +19,7 @@ const app = express();
 
 // Serve CSS and images
 app.use(express.static(path.join(__dirname, 'public')));
+console.log('SESSION_SECRET configured:', Boolean(process.env.SESSION_SECRET));
 
 // Configure EJS
 app.set('view engine', 'ejs');
