@@ -66,6 +66,8 @@ app.use((req, res, next) => {
 
     next();
 });
+
+
 app.use(flash);
 // Use the application routes
 app.use(router);
