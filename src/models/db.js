@@ -1,7 +1,12 @@
-
 import { Pool } from 'pg';
 
 // Create a PostgreSQL connection pool
+
+ const url = new URL(process.env.DB_URL);
+
+console.log('Database host:', url.hostname);
+console.log('Database name:', url.pathname.slice(1));
+
 const pool = new Pool({
     connectionString: process.env.DB_URL,
     ssl: {

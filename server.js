@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { testConnection } from './src/models/db.js';
 import express from 'express';
 import { fileURLToPath } from 'url';
@@ -5,6 +6,7 @@ import path from 'path';
 import router from './src/routes.js';
 import session from 'express-session';
 import flash from './src/middleware/flash.js';
+
 
 // Environment configuration
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
@@ -54,6 +56,16 @@ app.use(session({
         secure: process.env.NODE_ENV === 'production'
     }
 }));
+app.use((req, res, next) => {
+    res.locals.isLoggedIn = Boolean(req.session?.user);
+
+    res.locals.isAdmin =
+        req.session?.user?.role_id === 2;
+
+    res.locals.NODE_ENV = NODE_ENV;
+
+    next();
+});
 app.use(flash);
 // Use the application routes
 app.use(router);

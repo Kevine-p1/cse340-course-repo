@@ -30,6 +30,17 @@ import {
     showEditCategoryForm,
     processEditCategoryForm,
 } from './controllers/categories.js';
+import {
+    showUserRegistrationForm,
+    processUserRegistrationForm,
+    showLoginForm,
+    processLoginForm,
+    processLogout,
+    requireLogin,
+    requireRole,
+    showDashboard,
+    showUsersPage
+} from './controllers/users.js';
 import { testErrorPage } from './controllers/errors.js';
 
 
@@ -84,6 +95,29 @@ router.post(
     '/edit-category/:id',
     categoryValidation,
     processEditCategoryForm
+);
+
+// User registration routes
+router.get('/register', showUserRegistrationForm);
+router.post('/register', processUserRegistrationForm);
+// User registration
+router.get('/register', showUserRegistrationForm);
+router.post('/register', processUserRegistrationForm);
+
+// User login
+router.get('/login', showLoginForm);
+router.post('/login', processLoginForm);
+
+// User logout
+router.post('/logout', processLogout);
+
+router.get('/dashboard', requireLogin, showDashboard);
+
+router.get(
+    '/users',
+    requireLogin,
+    requireRole('admin'),
+    showUsersPage
 );
 // Test route for server errors
 router.get('/test-error', testErrorPage);
